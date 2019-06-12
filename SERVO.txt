@@ -1,0 +1,44 @@
+SERVOMOTOR
+/*
+ * servomotor.c
+ *
+ * Created: 12-06-2019 10:04:41
+ * Author : shreya
+ */ 
+
+#include <avr/io.h>
+#define F_CPU 16000000UL
+#include <util/delay.h>
+
+
+int main(void)
+{
+    /* Replace with your application code */
+	//configure TIMER1
+	TCCR1A|=(1<<COM1A1)|(1<<COM1B1)|(1<<WGM11);//non inverted pwm
+	TCCR1B|=(1<<WGM13)|(1<<WGM12)|(1<<CS11)|(1<<CS10);//PRESCALAR=64 MODE 14(fast pwm)
+	ICR1=4999;//(fpwm=50hz(period=20us)
+	DDRD|=(1<<PD5);//pwm pins as out
+	//0.388ms=0 degree;
+	//1.264ms=90 degree;
+	//2.14ms=180 degree;
+	//16Mhz/64=250kHz(4us period)
+	//Servo Angle 0 degree require pulse width of 0.388(388us)so value of OCR1A=388us/4us=97
+	//Servo Angle 90 degree require pulse width of 1.264(1264us)so value of OCR1A=1264us/4us=316
+	//Servo Angle 180 degree require pulse width of 2.14(214us)so value of OCR1A=214us/4us=535
+	
+	
+	
+		
+    while (1) 
+    {
+		OCR1A=97;//0 degree
+		_delay_ms(500);
+		OCR1A=316;//90 degree
+		_delay_ms(500);
+		OCR1A=535;//180 degree
+		_delay_ms(500);
+		
+    }
+}
+
